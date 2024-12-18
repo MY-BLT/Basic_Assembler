@@ -3,7 +3,7 @@
 
 #include<fstream>
 #include<stdexcept>
-#include<vetor>
+#include<vector>
 
 class ErrorHandling
 {
@@ -13,5 +13,5 @@ class ErrorHandling
 		void errorInLine(std::string message, int line);
 	private:
 		std::string filename;
-}
+};
 #endif

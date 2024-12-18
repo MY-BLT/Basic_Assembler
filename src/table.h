@@ -10,13 +10,14 @@ public:
     OpcodeTables();
     
     std::string getMRIOperand(const std::string& opcode);
-    int getNonMRIOperand(const std::string& opcode);
-    std::vector<std::string> getPseudoInstructions();
+    std::string getMRIOperandI(const std::string& opcode);
+    int getNON_MRIOperand(const std::string& opcode);
+    std::vector<std::string> gedInstruction();
 
 private:
     std::map<std::string, std::vector<std::string>> MRI;    
     std::map<std::string, int> NON_MRI;                   
-    std::vector<std::string> PSEUDO_INSTRUCTIONS;        
+    std::vector<std::string> INSTRUCTION;        
 };
 
 #endif

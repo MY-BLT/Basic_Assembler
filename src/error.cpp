@@ -25,7 +25,7 @@ bool ErrorHandling::errorHandling()
 		std::vector<std::string> parts;
 
 		while(iss >> part)
-			parts.push_back(part)
+			parts.push_back(part);
 	}
 
 	while(std::getline(file, line))
@@ -79,7 +79,7 @@ bool ErrorHandling::errorHandling()
 			return false;
 		}
 
-
+	}
 	bool checkOrgLimit()
 	{
 		if(isTrue[1] && isTrue[2])
