@@ -4,14 +4,25 @@
 #include<fstream>
 #include<stdexcept>
 #include<vector>
+#include<iostream>
+#include<sstream>
 
 class ErrorHandling
 {
-	public:
-		ErrorHandling(const std::string& filename);
-		bool errorHandling();
-		void errorInLine(std::string message, int line);
-	private:
-		std::string filename;
+public:
+	ErrorHandling(const std::string& filename);
+	bool errorHandling();
+private:
+	std::string filename;
+	std::fstream file;
+	int lineNum = 0;
+	std::vector<std::string> parts;
+	std::vector<bool> isTrue{false, false, false, false};
+	
+	bool checkEnd();
+	bool checkOrg(const std::string& line);
+	bool checkOrgAdd();
+	bool checkOrgLimit();
+	void errorInLine(const std::string& message, int line);
 };
 #endif

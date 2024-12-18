@@ -1,4 +1,4 @@
-#include<table.h>
+#include "table.h"
 
 OpcodeTables::OpcodeTables()
 {
@@ -61,5 +61,5 @@ int OpcodeTables::getNON_MRIOperand(const std::string& opcode)
 
 std::vector<std::string> OpcodeTables::getInstruction()
 {
-	return INSTURCTION;
+	return INSTRUCTION;
 }
