@@ -9,9 +9,10 @@ class OpcodeTables {
 public:
     OpcodeTables();
     
-    std::string getMRIOperand(const std::string& opcode);
-    std::string getMRIOperandI(const std::string& opcode);
-    int getNON_MRIOperand(const std::string& opcode);
+    static int findOpcode(const std::string& opcode);
+    static std::string getMRIOperand(const std::string& opcode);
+    static std::string getMRIOperandI(const std::string& opcode);
+    static int getNON_MRIOperand(const std::string& opcode);
     std::vector<std::string> getInstruction();
 
 private:

@@ -31,8 +31,23 @@ OpcodeTables::OpcodeTables()
 	
 	INSTRUCTION = {"ORG", "HEX", "DEC", "END"}; 
 }
+static int findOpcode(const std::string& opcode)
+{
+	if(MRI.find(opcode) != MRI.end())
+	{
+		return 0;
+	}
+	else if(NON_MRI.find(opcode) != NON_MRI.end())
+	{
+		return 1;
+	}
+	else
+	{
+		return -1;
+	}
+}	
 
-std::string OpcodeTables::getMRIOperand(const std::string& opcode)
+static std::string OpcodeTables::getMRIOperand(const std::string& opcode)
 {
 	if(MRI.find(opcode) != MRI.end())
 	{
@@ -41,7 +56,7 @@ std::string OpcodeTables::getMRIOperand(const std::string& opcode)
 	return "";
 }
 
-std::string OpcodeTables::getMRIOperandI(const std::string& opcode)
+static std::string OpcodeTables::getMRIOperandI(const std::string& opcode)
 {
 	if(MRI.find(opcode) != MRI.end())
 	{
@@ -50,7 +65,7 @@ std::string OpcodeTables::getMRIOperandI(const std::string& opcode)
 	return "";
 }
 
-int OpcodeTables::getNON_MRIOperand(const std::string& opcode)
+static int OpcodeTables::getNON_MRIOperand(const std::string& opcode)
 {
 	if(NON_MRI.find(opcode) != NON_MRI.end())
 	{
