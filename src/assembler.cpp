@@ -2,13 +2,14 @@
 
 Assembler::Assembler(const std::string& inputFileName) : fileName(inputFileName) 
 {
-    run(); // run the assembler
+    run();
 }
 
 // run the assembler
 void Assembler::run() 
 {
-    ErrorHandling error("../input/" + fileName + ".asm"); // Check for errors in source file
+    ErrorHandling error("../input/" + fileName + ".asm"); 
+    // Check for errors in source file
     if (error.errorHandling()) 
     {
         firstPass(); 
@@ -48,11 +49,11 @@ void Assembler::firstPass()
         if (word.back() == ',') 
         {
             std::string symbol = word.substr(0, word.size() - 1);
-            symbolTable[symbol] = lc; // Store label and its location
-            iss >> word; // Get the next word after the label
+            symbolTable[symbol] = lc; // Store label and its location in symbolTable
+            iss >> word;
         }
 
-        lc++; // Increment location counter
+        lc++;
     }
 }
 
@@ -88,18 +89,18 @@ void Assembler::secondPass()
 
         if (opcode.back() == ',') 
         {
-            opcode = opcode.substr(0, opcode.size() - 1); // Remove trailing comma
+            opcode = opcode.substr(0, opcode.size() - 1); 
             if (symbolTable.find(opcode) != symbolTable.end()) 
             {
                 int value = symbolTable[opcode];
                 std::stringstream ss;
                 ss << std::hex << value;
-                hexCode += ss.str(); // Concatenate the symbol's value
+                hexCode += ss.str();
             } 
             else 
             {
-                std::cerr << "Error: Undefined symbol " << operand << "\n"; 
-                continue; // Handle error
+                errorInLine("Undefined symbol " + operand, lc); 
+                continue;
             }
             iss >> opcode;
         }
@@ -108,12 +109,11 @@ void Assembler::secondPass()
        
         int findnum = OpcodeTables::findOpcode(opcode);
         bool isMRI = findnum == 0; // Check if opcode is MRI
-        // bool notFound = findnum == -1;
-        bool isNON_MRI = findnum == 1;
+        bool isNON_MRI = findnum == 1; // Check if opcode is NON-MRI
 
         if (isMRI) 
         {
-            iss >> operand; // Read the operand
+            iss >> operand;
             
             if (iss.eof()) 
             {
@@ -122,14 +122,14 @@ void Assembler::secondPass()
             else 
             {
                 std::string addressingType;
-                iss >> addressingType; // Read addressing type
+                iss >> addressingType;
                 if (addressingType == "I") // Indirect addressing
                 {
                     hexCode = OpcodeTables::getMRIOperandI(opcode);
                 }
                 else 
                 {
-                    std::cerr << "Error: Unknown addressing mode!\n"; 
+                    errorInLine("Unknown addressing mode!", lc); 
                     continue; 
                 }
             }
@@ -140,15 +140,13 @@ void Assembler::secondPass()
                 int value = symbolTable[operand];
                 std::stringstream ss;
                 ss << std::setw(3) << std::setfill('0') << std::hex << value;
-                hexCode += ss.str(); // Concatenate the symbol's value
+                hexCode += ss.str();
             } 
             else 
             {
-                std::cerr << "Error: Undefined symbol " << operand << "\n"; 
-                continue; // Handle error
+                errorInLine("Undefined symbol " + operand, lc); 
+                continue;
             }
-
-            // Store final machine code
             machineCode.insert({lc, hexCode}); 
         } 
         else if(isNON_MRI)
@@ -159,18 +157,18 @@ void Assembler::secondPass()
             {
                 std::stringstream ss;
                 ss << std::hex << nonMRIValue;
-                machineCode.insert({lc, ss.str()}); // Store machine code
+                machineCode.insert({lc, ss.str()});
             } 
             else 
             {
-                std::cerr << "Error: Unknown opcode " << opcode << "\n"; 
+                errorInLine("Unknown opcode " + opcode, lc); 
             }
         } 
         else 
         {
             if(iss.eof())
             {
-                std::cerr << "no value for parameter. " << lc << "\n";
+                errorInLine("no value for parameter. ", lc);
                 continue;
             }
             iss >> operand;
@@ -210,7 +208,7 @@ void Assembler::outputWriter(const std::string& outputPath)
     std::ofstream outputFile(outputPath);
     if (!outputFile) 
     {
-        std::cerr << "Unable to open output file\n";
+        errorInLine("Unable to open output file");
         return;
     }
     for (const auto& pair : machineCode) 
@@ -221,3 +219,13 @@ void Assembler::outputWriter(const std::string& outputPath)
     }
     outputFile.close();
 }
+
+void Assembler::errorInLine(const std::string& message, int line)
+{ 
+	std::cerr << message << "(Line " << line << ")\n";
+}	
+
+void Assembler::errorInLine(const std::string& message)
+{ 
+	std::cerr << message << "\n";
+}	

@@ -7,7 +7,6 @@ ErrorHandling::ErrorHandling(const std::string& filename)
 	
 }
 
-
 bool ErrorHandling::checkEnd(std::string lastLine)
 {
 	if(lastLine == "END")
