@@ -8,19 +8,34 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
-
+#include "error.cpp"
+#include "table.cpp"
+#include <bitset>
+/** 
+ * this class is the main class for basic assembler
+ * @author MYasin
+*/
 class Assembler 
 {
-	public:
-		void run(const std::string fileName);
-		Assembler(const std::string inputFileName);
-	private:
-		void firstPass();
-		void secondPass();
-		std::string intToBinary(int value, int bits);
-		void outputWriter(const std::string& path, const std::unordered_map<std::string, int>& output);
-		
-		std::string fileName;
-		std::unordered_map<std::string, int> symbolTable;
+public:
+    Assembler(const std::string& inputFileName);
+private:
+    /** 
+     * run is for using first and second pass in class
+     * @see firstPass() for first pass
+     * @see secondPass() for second pass
+    */
+    void run();
+    // First pass for finding symbols
+    void firstPass();
+    // Second pass for converting instructions to machine code
+    void secondPass();
+    std::string intToBinary(int value, int bits);
+    void outputWriter(const std::string& outputPath);
+    
+    std::string fileName;
+    std::unordered_map<std::string, int> symbolTable;
+    std::map<int, std::string> machineCode; // Store generated machine codes for output
 };
-#endif
+
+#endif // ASSEMBLER_H

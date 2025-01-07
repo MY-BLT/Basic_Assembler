@@ -3,22 +3,18 @@
 ErrorHandling::ErrorHandling(const std::string& filename)
 {
 	this->filename = filename;
-	this->errorHandling();
+	this->file.open(filename);
+	
 }
 
 
-bool ErrorHandling::checkEnd()
+bool ErrorHandling::checkEnd(std::string lastLine)
 {
-	std::string lastLine;
-	while(std::getline(file, lastLine)) {}
-	file.clear();
-	file.seekg(0);
-
 	if(lastLine == "END")
 	{
 		return true;
 	}
-	errorInLine("No END.", lineNum);
+	errorInLine("No END." + lastLine, lineNum);
 	return false;
 }
 bool ErrorHandling::checkOrg(const std::string& line)
@@ -30,10 +26,16 @@ bool ErrorHandling::checkOrg(const std::string& line)
 		parts.clear();
 		while(iss >> part)
 			parts.push_back(part);
+		isTrue[1] = true; // ORG is available in the file
+		isTrue[2] = checkOrgAdd();
+		isTrue[3] = checkOrgLimit();
 		return true;
 	}
-	return false;
-
+	else if(!isTrue[1])
+	{
+		return false;
+	}
+	return isTrue[1];
 }
 
 bool ErrorHandling::checkOrgAdd()
@@ -72,7 +74,6 @@ bool ErrorHandling::checkOrgLimit()
 
 bool ErrorHandling::errorHandling()
 {
-	this->file.open("./output/" + filename);
 	if(!file.is_open())
 	{
 		throw std::runtime_error("Not able to open file: " + filename);
@@ -84,14 +85,11 @@ bool ErrorHandling::errorHandling()
 	{
 		lineNum++;
 		
-		isTrue[0] = checkEnd();
 		isTrue[1] = checkOrg(line);
-		isTrue[2] = checkOrgAdd();
-	        isTrue[3] = checkOrgLimit();
 	}
-	if(!isTrue[1])
-		errorInLine("No ORG.", lineNum);
 
+	isTrue[0] = checkEnd(line);
+	std::cout << "error checking: " << isTrue[0] << ' ' << isTrue[1] << ' ' << isTrue[2] << ' ' << isTrue[3] << '\n';
 	return isTrue[0] && isTrue[1] && isTrue[2] && isTrue[3];
 	
 }	

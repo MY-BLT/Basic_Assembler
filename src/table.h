@@ -13,13 +13,12 @@ public:
     static std::string getMRIOperand(const std::string& opcode);
     static std::string getMRIOperandI(const std::string& opcode);
     static int getNON_MRIOperand(const std::string& opcode);
-    std::vector<std::string> getInstruction();
+    static std::vector<std::string> getInstruction();
 
 private:
-    std::map<std::string, std::vector<std::string>> MRI;    
-    std::map<std::string, int> NON_MRI;                   
-    std::vector<std::string> INSTRUCTION;        
+    static std::map<std::string, std::vector<std::string>> MRI;
+    static std::map<std::string, int> NON_MRI;
+    static std::vector<std::string> INSTRUCTION;
 };
 
 #endif
-
